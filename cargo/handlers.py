@@ -6,7 +6,7 @@ router_cargo = APIRouter()
 
 
 @router_cargo.post("/")
-async def create_cargo():
+async def create_cargo(zip: str):
     """"Создание нового груза (характеристики локаций pick-up, delivery определяются по введенному zip-коду);"""""
     pass
 
