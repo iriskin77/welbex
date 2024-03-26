@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from cargo.schema import CargoCreateRequest, CargoCreateResponse
 from cargo.models import Cargo
+from car.models import Car
 from cargo import services
 
 
 router_cargo = APIRouter()
-
 
 @router_cargo.post("/")
 async def create_cargo(item: CargoCreateRequest):

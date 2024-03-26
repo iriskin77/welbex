@@ -1,3 +1,5 @@
+from tortoise.expressions import Q
+
 from cargo.models import Cargo
 from car.models import Car
 from location.models import Location
@@ -45,29 +47,25 @@ def count_miles(cargo_latitude: float,
 async def get_cargo_cars_by_id(id: int):
     list_cars = []
     cargo = await get_cargo_by_id(id=id)
-    #c = await Cargo.filter(id=id).first()
-    print(1111111, cargo)
-    pick_up = await Location.filter(id=cargo['pick_up_location_id']).values()
-    delivery = await Location.filter(id=cargo['delivery_location_id']).values()
-    print(11111111111, pick_up)
+    pick_up, delivery = await Location.filter(
+        Q(id=cargo.pick_up_location_id) |
+        Q(id=cargo.delivery_location_id)
+    )
     cars = await Car.all().values()
-    #print(cars)
     for car in cars:
-        miles = count_miles(cargo_latitude=pick_up[0]['latitude'],
-                       cargo_longitude=pick_up[0]['longitude'],
-                       car_latitude=car['latitude'],
-                       car_longitude=car['longitude'])
+        miles = count_miles(cargo_latitude=pick_up.latitude,
+                            cargo_longitude=pick_up.longitude,
+                            car_latitude=car['latitude'],
+                            car_longitude=car['longitude'])
         if miles is not None:
             car['miles'] = miles
             list_cars.append(car)
 
-    print(list_cars)
-
-    res = {"cargo_name": cargo['cargo_name'],
-           "weight": cargo['weight'],
-           "description": cargo['description'],
-           "pick_up_location": pick_up[0],
-           "delivery_location": delivery[0],
+    res = {"cargo_name": cargo.cargo_name,
+           "weight": cargo.weight,
+           "description": cargo.description,
+           "pick_up_location": pick_up,
+           "delivery_location": delivery,
            "cars": list_cars}
 
     return res
@@ -82,11 +80,10 @@ async def get_cargos_cars():
     return res
 
 
-async def get_cargo_by_id(id: int) -> dict:
-    cargo = await Cargo.filter(id=id).values()
-    print("get_cargo_by_id", cargo)
-    if cargo:
-        return cargo[0]
+async def get_cargo_by_id(id: int):
+    cargo = await Cargo.get_or_none(id=id)
+    if cargo is not None:
+        return cargo
 
 
 # =================== patch/put handlers ===========================
