@@ -1,6 +1,11 @@
 from cargo.models import Cargo
+from car.models import Car
 from location.models import Location
 from cargo.schema import CargoCreateRequest
+from geopy.distance import geodesic
+
+
+# =========================== post handlers ===========================
 
 
 async def create_cargo(item: CargoCreateRequest):
@@ -20,8 +25,79 @@ async def create_cargo(item: CargoCreateRequest):
     return new_cargo.id
 
 
+# ============================= get handlers =========================
 
 
+def count_miles(cargo_latitude: float,
+                cargo_longitude: float,
+                car_latitude: float,
+                car_longitude: float):
+
+    cargo = (cargo_latitude, cargo_longitude)
+    car = (car_latitude, car_longitude)
+
+    miles = geodesic(cargo, car).miles
+
+    if miles <= 450:
+        return miles
+
+
+async def get_cargo_cars_by_id(id: int):
+    list_cars = []
+    cargo = await get_cargo_by_id(id=id)
+    #c = await Cargo.filter(id=id).first()
+    print(1111111, cargo)
+    pick_up = await Location.filter(id=cargo['pick_up_location_id']).values()
+    delivery = await Location.filter(id=cargo['delivery_location_id']).values()
+    print(11111111111, pick_up)
+    cars = await Car.all().values()
+    #print(cars)
+    for car in cars:
+        miles = count_miles(cargo_latitude=pick_up[0]['latitude'],
+                       cargo_longitude=pick_up[0]['longitude'],
+                       car_latitude=car['latitude'],
+                       car_longitude=car['longitude'])
+        if miles is not None:
+            car['miles'] = miles
+            list_cars.append(car)
+
+    print(list_cars)
+
+    res = {"cargo_name": cargo['cargo_name'],
+           "weight": cargo['weight'],
+           "description": cargo['description'],
+           "pick_up_location": pick_up[0],
+           "delivery_location": delivery[0],
+           "cars": list_cars}
+
+    return res
+
+
+async def get_cargos_cars():
+    res = []
+    cargos = await Cargo.all()
+    for cargo in cargos:
+        r = await get_cargo_cars_by_id(cargo.id)
+        res.append(r)
+    return res
+
+
+async def get_cargo_by_id(id: int) -> dict:
+    cargo = await Cargo.filter(id=id).values()
+    print("get_cargo_by_id", cargo)
+    if cargo:
+        return cargo[0]
+
+
+# =================== patch/put handlers ===========================
+
+
+# ====================delete handlers ==============================
+
+async def delete_cargo_by_id(id: int):
+    cargo = await Cargo.filter(id=id).first()
+    await cargo.delete()
+    return cargo.id
 
 
 

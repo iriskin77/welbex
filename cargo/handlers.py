@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from cargo.schema import CargoCreateRequest, CargoCreateResponse
+from cargo.models import Cargo
 from cargo import services
 
 
@@ -16,14 +17,23 @@ async def create_cargo(item: CargoCreateRequest):
 @router_cargo.get("/list_cargos")
 async def get_list_cargos():
     """"Получение списка грузов (локации pick-up, delivery, количество ближайших машин до груза ( =< 450 миль));"""""
-    pass
+    res = await services.get_cargos_cars()
+    return res
 
 
-@router_cargo.get("get_cargo")
-async def get_cargo_by_id():
+@router_cargo.get("/get_cargo")
+async def get_cargo_by_id(id: int):
     """"Получение информации о конкретном грузе по ID 
     (локации pick-up, delivery, вес, описание, список номеров ВСЕХ машин с расстоянием до выбранного груза);"""""
-    pass
+
+    cargo = await services.get_cargo_by_id(id=id)
+    #cargo = await Cargo.filter(id=id).first()
+    #print(2222222222222, cargo)
+    if cargo is None:
+        raise HTTPException(status_code=404, detail="Cargo with this id was not found")
+
+    res = await services.get_cargo_cars_by_id(id=id)
+    return res
 
 
 @router_cargo.put("/")

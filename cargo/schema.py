@@ -1,6 +1,8 @@
+from typing import Optional
 from pydantic import BaseModel
 from datetime import datetime
 from location.schema import Location
+from car.schema import CreateCarRequest
 
 
 class CargoCreateRequest(BaseModel):
@@ -18,3 +20,7 @@ class CargoCreateResponse(CargoCreateRequest):
     pick_up_location: Location
     delivery_location: Location
 
+
+class CargoCarsResponse(CargoCreateRequest):
+
+    cars: Optional[CreateCarRequest]
