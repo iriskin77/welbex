@@ -7,6 +7,7 @@ from cargo import services
 
 router_cargo = APIRouter()
 
+
 @router_cargo.post("/")
 async def create_cargo(item: CargoCreateRequest):
     """"Создание нового груза (характеристики локаций pick-up, delivery определяются по введенному zip-коду);"""""
@@ -27,8 +28,6 @@ async def get_cargo_by_id(id: int):
     (локации pick-up, delivery, вес, описание, список номеров ВСЕХ машин с расстоянием до выбранного груза);"""""
 
     cargo = await services.get_cargo_by_id(id=id)
-    #cargo = await Cargo.filter(id=id).first()
-    #print(2222222222222, cargo)
     if cargo is None:
         raise HTTPException(status_code=404, detail="Cargo with this id was not found")
 
@@ -36,7 +35,14 @@ async def get_cargo_by_id(id: int):
     return res
 
 
-@router_cargo.put("/")
+@router_cargo.get("/filter")
+async def filter_cargos(weight: int):
+    """"Фильтр списка грузов (вес, мили ближайших машин до грузов);"""""
+    res = await services.filter_by_weight_or_miles(weight=weight)
+    return res
+
+
+@router_cargo.patch("/")
 async def update_cargo():
     """Редактирование груза по ID (вес, описание)"""""
     pass

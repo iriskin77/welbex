@@ -11,8 +11,16 @@ from geopy.distance import geodesic
 
 
 async def create_cargo(item: CargoCreateRequest):
-    pick_up_location = await Location.filter(zip=item.zip_pickup).first()
-    delivery_location = await Location.filter(zip=item.zip_delivery).first()
+    pick_up_location, delivery_location = await Location.filter(
+        Q(zip=item.zip_pickup) |
+        Q(zip=item.zip_delivery)
+    )
+    #delivery_location = await Location.filter(zip=item.zip_delivery).first()
+
+# pick_up, delivery = await Location.filter(
+#         Q(id=cargo.pick_up_location_id) |
+#         Q(id=cargo.delivery_location_id)
+#     )
 
     print(pick_up_location)
     print(delivery_location)
@@ -30,20 +38,6 @@ async def create_cargo(item: CargoCreateRequest):
 # ============================= get handlers =========================
 
 
-def count_miles(cargo_latitude: float,
-                cargo_longitude: float,
-                car_latitude: float,
-                car_longitude: float):
-
-    cargo = (cargo_latitude, cargo_longitude)
-    car = (car_latitude, car_longitude)
-
-    miles = geodesic(cargo, car).miles
-
-    if miles <= 450:
-        return miles
-
-
 async def get_cargo_cars_by_id(id: int):
     list_cars = []
     cargo = await get_cargo_by_id(id=id)
@@ -53,10 +47,12 @@ async def get_cargo_cars_by_id(id: int):
     )
     cars = await Car.all().values()
     for car in cars:
+
         miles = count_miles(cargo_latitude=pick_up.latitude,
                             cargo_longitude=pick_up.longitude,
                             car_latitude=car['latitude'],
                             car_longitude=car['longitude'])
+
         if miles is not None:
             car['miles'] = miles
             list_cars.append(car)
@@ -72,12 +68,12 @@ async def get_cargo_cars_by_id(id: int):
 
 
 async def get_cargos_cars():
-    res = []
+    list_cargos = []
     cargos = await Cargo.all()
     for cargo in cargos:
-        r = await get_cargo_cars_by_id(cargo.id)
-        res.append(r)
-    return res
+        cargo = await get_cargo_cars_by_id(cargo.id)
+        list_cargos.append(cargo)
+    return list_cargos
 
 
 async def get_cargo_by_id(id: int):
@@ -86,13 +82,38 @@ async def get_cargo_by_id(id: int):
         return cargo
 
 
+def count_miles(cargo_latitude: float,
+                cargo_longitude: float,
+                car_latitude: float,
+                car_longitude: float):
+
+    cargo = (cargo_latitude, cargo_longitude)
+    car = (car_latitude, car_longitude)
+
+    miles = geodesic(cargo, car).miles
+
+    if miles <= 450:
+        return miles
+
+
+async def filter_by_weight_or_miles(weight: int):
+        list_cargos = []
+        cargos = await Cargo.all().filter(Q(weight__lt=weight)).order_by()
+        for cargo in cargos:
+            cargo = await get_cargo_cars_by_id(cargo.id)
+            list_cargos.append(cargo)
+        return list_cargos
+
+
+
 # =================== patch/put handlers ===========================
 
 
 # ====================delete handlers ==============================
 
+
 async def delete_cargo_by_id(id: int):
-    cargo = await Cargo.filter(id=id).first()
+    cargo = await get_cargo_by_id(id=id)
     await cargo.delete()
     return cargo.id
 

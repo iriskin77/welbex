@@ -24,3 +24,9 @@ class CargoCreateResponse(CargoCreateRequest):
 class CargoCarsResponse(CargoCreateRequest):
 
     cars: Optional[CreateCarRequest]
+
+
+class CargoUpdateRequest(BaseModel):
+
+    weight: int
+    description: str

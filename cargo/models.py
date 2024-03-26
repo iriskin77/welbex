@@ -17,7 +17,6 @@ class Cargo(models.Model):
         'models.Location', related_name='delivery', on_delete=fields.SET_NULL, null=True
     )
 
-
     def __str__(self):
         return self.cargo_name
 
