@@ -1,16 +1,23 @@
 from tortoise import models
 from tortoise import fields
+from location.models import Location
 
 
 class Cargo(models.Model):
 
     id = fields.IntField(pk=True, unique=True)
     cargo_name = fields.CharField(max_length=255)
-    pick_up_cargo = fields.CharField(max_length=255)
-    delivery_cargo = fields.CharField(max_length=255)
     weight = fields.IntField()
     description = fields.TextField()
-    created_at = fields.DatetimeField()
+    created_at = fields.DatetimeField(auto_now_add=True)
+    pick_up_location = fields.ForeignKeyField(
+        'models.Location', related_name='pick_up', on_delete=fields.SET_NULL, null=True
+    )
+    delivery_location = fields.ForeignKeyField(
+        'models.Location', related_name='delivery', on_delete=fields.SET_NULL, null=True
+    )
+
 
     def __str__(self):
         return self.cargo_name
+

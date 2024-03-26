@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from cargo.schema import CargoCreateRequest, CargoCreateResponse
 from cargo import services
 
 
@@ -6,9 +7,10 @@ router_cargo = APIRouter()
 
 
 @router_cargo.post("/")
-async def create_cargo(zip: str):
+async def create_cargo(item: CargoCreateRequest):
     """"Создание нового груза (характеристики локаций pick-up, delivery определяются по введенному zip-коду);"""""
-    pass
+    res = await services.create_cargo(item=item)
+    return res
 
 
 @router_cargo.get("/list_cargos")

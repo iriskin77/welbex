@@ -10,5 +10,6 @@ class Location(models.Model):
     zip = fields.IntField()
     latitude = fields.FloatField()
     longitude = fields.FloatField()
+    created_at = fields.DatetimeField(auto_now_add=True)
 
 
