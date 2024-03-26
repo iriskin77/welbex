@@ -7,8 +7,6 @@ class Car(models.Model):
     id = fields.IntField(pk=True, unique=True)
     unique_number = fields.CharField(max_length=255)
     car_name = fields.CharField(max_length=255)
-    city = fields.CharField(max_length=255)
-    state = fields.CharField(max_length=255)
     latitude = fields.FloatField()
     longitude = fields.FloatField()
     load_capacity = fields.IntField()
