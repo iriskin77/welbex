@@ -10,17 +10,26 @@ router_car = APIRouter()
 
 @router_car.post("/")
 async def create_car(car: CreateCarRequest):
-    new_car = await services.create_car(car=car)
+    try:
+        new_car = await services.create_car(car=car)
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return new_car
 
 
 @router_car.patch("/")
 async def update_car():
-    await services.update_all_cars_location()
+    try:
+        await services.update_all_cars_location()
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"cars locations updated successfully": 201})
 
 
 @router_car.post("/upload_cars")
 async def upload_cars():
-    await load.load_cards()
+    try:
+        await load.load_cards()
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"cars uploaded successfully": 201})
