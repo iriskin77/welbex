@@ -1,11 +1,12 @@
-from typing import Optional
+from typing import List
 from pydantic import BaseModel
-from datetime import datetime
 from location.schema import Location
 from car.schema import CreateCarRequest
 
+# create_cargo
 
 class CargoCreateRequest(BaseModel):
+    """"Запрос на создание груза"""""
 
     cargo_name: str
     zip_pickup: str
@@ -14,19 +15,40 @@ class CargoCreateRequest(BaseModel):
     description: str
 
 
-class CargoCreateResponse(CargoCreateRequest):
+class CargoCreateResponse(BaseModel):
+    """"Ответ на создание груза"""""
 
-    created_at: datetime
+    id: int
+
+# get_list_cargos
+
+
+class CargoByIdResponse(BaseModel):
+
+    cargo_name: str
+    weight: int
+    description: str
     pick_up_location: Location
     delivery_location: Location
+    cars: List[CreateCarRequest]
 
 
-class CargoCarsResponse(CargoCreateRequest):
+class CargosListResponse(BaseModel):
 
-    cars: Optional[CreateCarRequest]
+    cargos: List[CargoByIdResponse]
 
 
 class CargoUpdateRequest(BaseModel):
 
     weight: int
     description: str
+
+
+class CargoUpdateResponse(BaseModel):
+
+    id: int
+
+
+class CargoDeleteResponse(BaseModel):
+
+    id: int

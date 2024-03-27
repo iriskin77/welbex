@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-import pandas as pd
-from location.models import Location
+from .models import Location
 from load_data import load
+import pandas as pd
 
 router_location = APIRouter()
 

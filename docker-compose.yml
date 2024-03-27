@@ -2,6 +2,15 @@ version: "3.9"
 
 services:
 
+#  app_test:
+#    build: .
+#    container_name: app_test
+#    command: ['./start.sh']
+#    #volumes:
+#      #- ./task_db.sqlite3:/test_task/task_db.sqlite3
+#    ports:
+#      - "8000:8000"
+
   db:
     image: postgres
     container_name: "db_welbex"
@@ -11,7 +20,7 @@ services:
     env_file:
       - .env
     ports:
-      - "4777:5432"
+      - "5432:5432"
 
 
 volumes:

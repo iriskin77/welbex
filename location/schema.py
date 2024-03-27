@@ -9,7 +9,6 @@ class Location(BaseModel):
     zip: int
     latitude: float
     longitude: float
-    created_at: datetime
 
 
 

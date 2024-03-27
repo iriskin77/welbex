@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from car.schema import CreateCarRequest
+from .schema import CreateCarRequest, CarUpdateRequest
 from car import services
 from load_data import load
 
@@ -11,22 +11,32 @@ router_car = APIRouter()
 @router_car.post("/")
 async def create_car(car: CreateCarRequest):
     try:
-        new_car = await services.create_car(car=car)
+        new_car_id = await services.create_car(car=car)
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return new_car
+    return new_car_id
 
 
-@router_car.patch("/")
-async def update_car():
+@router_car.patch("/{id}")
+async def update_car_by_id(id: int, car_update: CarUpdateRequest):
+    """"Редактирование машины по ID (локация (определяется по введенному zip-коду))"""
+
+    car = await services.get_car_by_id(id=id)
+    if car is None:
+        raise HTTPException(status_code=404, detail="Cargo with this id was not found")
+
+    car_to_update = car_update.dict(exclude_none=True)
+    if car_to_update == {}:
+        raise HTTPException(status_code=500, detail="At least one parametre should be provided")
+
     try:
-        await services.update_all_cars_location()
+        car_updated_id = await services.update_car_by_id(id=id, car_to_update=car_to_update)
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return JSONResponse({"cars locations updated successfully": 201})
+    return {"id": car_updated_id}
 
 
-@router_car.post("/upload_cars")
+@router_car.get("/upload_cars")
 async def upload_cars():
     try:
         await load.load_cards()

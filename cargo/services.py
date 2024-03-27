@@ -1,16 +1,15 @@
 from tortoise.expressions import Q
-
-from cargo.models import Cargo
+from .models import Cargo
 from car.models import Car
 from location.models import Location
-from cargo.schema import CargoCreateRequest
+from .schema import CargoCreateRequest, CargoUpdateRequest
 from geopy.distance import geodesic
 
 
 # =========================== post handlers ===========================
 
 
-async def create_cargo(item: CargoCreateRequest):
+async def create_cargo(item: CargoCreateRequest) -> int:
     pick_up_location, delivery_location = await Location.filter(
         Q(zip=item.zip_pickup) |
         Q(zip=item.zip_delivery)
@@ -64,7 +63,8 @@ async def get_cargos_cars():
     for cargo in cargos:
         cargo = await get_cargo_cars_by_id(cargo.id)
         list_cargos.append(cargo)
-    return list_cargos
+    cargos = {"cargos": list_cargos}
+    return cargos
 
 
 async def get_cargo_by_id(id: int):
@@ -99,6 +99,11 @@ async def filter_by_weight_or_miles(weight: int):
 
 # =================== patch/put handlers ===========================
 
+
+async def update_cargo(id: int, cargo_to_update: dict):
+    cargo = await get_cargo_by_id(id=id)
+    cargo = await cargo.update_from_dict(cargo_to_update).save()
+    return cargo.id
 
 # ====================delete handlers ==============================
 

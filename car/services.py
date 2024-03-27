@@ -1,10 +1,10 @@
 from random import randint
-from car.models import Car
+from .models import Car
 from location.models import Location
-from car.schema import CreateCarRequest
+from .schema import CreateCarRequest
 
 
-async def create_car(car: CreateCarRequest):
+async def create_car(car: CreateCarRequest) -> int:
     car_loc = await Location.filter(zip=car.zip).first()
     new_car = await Car(unique_number=car.unique_number,
                         car_name=car.car_name,
@@ -15,15 +15,20 @@ async def create_car(car: CreateCarRequest):
     return new_car.id
 
 
-async def update_all_cars_location():
-    car_locs = await Car.all()
-    new_locs = await Location.all()
+async def get_car_by_id(id: int):
+    car = await Car.get_or_none(id=id)
+    if car is not None:
+        return car
 
-    for i in range(len(car_locs)):
 
-        rand_location = randint(0, len(new_locs))
-        car_locs[i].car_location_id = new_locs[rand_location].id
-
-    await Car.bulk_update(car_locs, ['car_location_id'])
-
+async def update_car_by_id(id: int, car_to_update: dict):
+    car = await get_car_by_id(id=id)
+    print(car)
+    #print(car.car_location_id)
+    new_car_location = await Location.get(zip=car_to_update['zip'])
+    print(new_car_location)
+    car_to_update['car_location_id'] = new_car_location.id
+    await car.update_from_dict(car_to_update).save()
+    print(car)
+    return car.id
 

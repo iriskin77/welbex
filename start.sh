@@ -1,6 +1,6 @@
 #!/bin/sh
 
-until aerich migrate && aerich update
+until aerich upgrade
 do
     echo "Waiting for db to be ready..."
     sleep 10
@@ -10,4 +10,4 @@ do
     echo "Waiting for starting the application..."
     sleep 10
 done
-python3 load_data.py
+cd load_data && python3 load.py

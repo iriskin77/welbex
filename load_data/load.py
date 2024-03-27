@@ -4,6 +4,7 @@ from car.models import Car
 from random import randint
 from string import ascii_uppercase
 from core import settings
+import requests
 
 
 async def load_uszips() -> None:
@@ -38,4 +39,9 @@ async def generate_cars() -> list:
     return cars
 
 
+def make_requests():
+    requests.get("http://0.0.0.0:8000/location/load_uszips")
+    requests.get("http://0.0.0.0:8000/car/upload_cars")
 
+
+#make_requests()
