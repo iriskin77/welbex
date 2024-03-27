@@ -1,16 +1,18 @@
-from tortoise import models
-from tortoise import fields
+from sqlalchemy import Column, String, Integer, Text, DateTime, ForeignKey, Boolean, Date, Float
+from sqlalchemy.orm import relationship
+from core.base import Base
 
 
-class Car(models.Model):
+class Car(Base):
 
-    id = fields.IntField(pk=True, unique=True)
-    unique_number = fields.CharField(max_length=255)
-    car_name = fields.CharField(max_length=255)
-    latitude = fields.FloatField()
-    longitude = fields.FloatField()
-    load_capacity = fields.IntField()
-    created_at = fields.DatetimeField(auto_now_add=True)
+    __tablename__ = "car"
 
-    def __str__(self):
-        return self.car_name
+    id = Column(Integer, primary_key=True, index=True, unique=True)
+    unique_number = Column(String)
+    car_name = Column(String)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    load_capacity = Column(Integer)
+    created_at = Column(DateTime)
+
+

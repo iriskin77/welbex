@@ -1,15 +1,16 @@
-from tortoise import models
-from tortoise import fields
+from sqlalchemy import Column, String, Integer, Text, DateTime, ForeignKey, Boolean, Date, Float
+from sqlalchemy.orm import relationship
+from core.base import Base
 
 
-class Location(models.Model):
+class Location(Base):
 
-    id = fields.IntField(pk=True, unique=True)
-    city = fields.CharField(max_length=255)
-    state = fields.CharField(max_length=255)
-    zip = fields.IntField()
-    latitude = fields.FloatField()
-    longitude = fields.FloatField()
-    created_at = fields.DatetimeField(auto_now_add=True)
+    __tablename__ = "location"
 
-
+    id = Column(Integer, primary_key=True, index=True, unique=True)
+    city = Column(String)
+    state = Column(String)
+    zip = Column(Integer)
+    latitude = Column(Float)
+    longitude = Column(Float)
+    created_at = Column(DateTime)

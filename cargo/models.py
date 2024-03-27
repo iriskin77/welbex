@@ -1,22 +1,20 @@
-from tortoise import models
-from tortoise import fields
-from location.models import Location
+from sqlalchemy import Column, String, Integer, Text, DateTime, ForeignKey, Boolean, Date
+from sqlalchemy.orm import relationship
+from core.base import Base
 
+class Cargo(Base):
 
-class Cargo(models.Model):
+    __tablename__ = "cargo"
 
-    id = fields.IntField(pk=True, unique=True)
-    cargo_name = fields.CharField(max_length=255)
-    weight = fields.IntField()
-    description = fields.TextField()
-    created_at = fields.DatetimeField(auto_now_add=True)
-    pick_up_location = fields.ForeignKeyField(
-        'models.Location', related_name='pick_up', on_delete=fields.SET_NULL, null=True
-    )
-    delivery_location = fields.ForeignKeyField(
-        'models.Location', related_name='delivery', on_delete=fields.SET_NULL, null=True
-    )
-
-    def __str__(self):
-        return self.cargo_name
+    id = Column(Integer, primary_key=True, index=True, unique=True)
+    cargo_name = Column(String)
+    weight = Column(Integer)
+    description = Column(Text)
+    created_at = Column(DateTime)
+    # pick_up_location = fields.ForeignKeyField(
+    #     'models.Location', related_name='pick_up', on_delete=fields.SET_NULL, null=True
+    # )
+    # delivery_location = fields.ForeignKeyField(
+    #     'models.Location', related_name='delivery', on_delete=fields.SET_NULL, null=True
+    # )
 
