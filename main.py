@@ -1,22 +1,22 @@
-from fastapi import FastAPI
-import uvicorn
+from fastapi import FastAPI, BackgroundTasks
 from routes import routes
 from tortoise.contrib.fastapi import register_tortoise
 from core.settings import DATABASE_URI, APPS_MODELS
-from contextlib import asynccontextmanager
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 import pandas as pd
-from location.models import Location
-from pandas import DataFrame
-
-
-uszips = pd.read_csv("/home/abc/Рабочий стол/welbex/uszips/uszips.csv")
-
-
+from tasks import update_all_cars_location
 
 
 
 app = FastAPI()
 app.include_router(routes)
+
+
+@app.on_event('startup')
+async def init_data():
+    scheduler = AsyncIOScheduler()
+    scheduler.add_job(update_all_cars_location, 'cron', second='*/5')
+    scheduler.start()
 
 
 register_tortoise(

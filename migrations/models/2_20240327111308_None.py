@@ -25,12 +25,9 @@ CREATE TABLE IF NOT EXISTS "car" (
     "id" SERIAL NOT NULL PRIMARY KEY,
     "unique_number" VARCHAR(255) NOT NULL,
     "car_name" VARCHAR(255) NOT NULL,
-    "city" VARCHAR(255) NOT NULL,
-    "state" VARCHAR(255) NOT NULL,
-    "latitude" DOUBLE PRECISION NOT NULL,
-    "longitude" DOUBLE PRECISION NOT NULL,
     "load_capacity" INT NOT NULL,
-    "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP
+    "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP,
+    "car_location_id" INT REFERENCES "location" ("id") ON DELETE SET NULL
 );
 CREATE TABLE IF NOT EXISTS "aerich" (
     "id" SERIAL NOT NULL PRIMARY KEY,

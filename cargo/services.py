@@ -15,15 +15,6 @@ async def create_cargo(item: CargoCreateRequest):
         Q(zip=item.zip_pickup) |
         Q(zip=item.zip_delivery)
     )
-    #delivery_location = await Location.filter(zip=item.zip_delivery).first()
-
-# pick_up, delivery = await Location.filter(
-#         Q(id=cargo.pick_up_location_id) |
-#         Q(id=cargo.delivery_location_id)
-#     )
-
-    print(pick_up_location)
-    print(delivery_location)
 
     new_cargo = await Cargo(cargo_name=item.cargo_name,
                             pick_up_location=pick_up_location,
@@ -47,11 +38,11 @@ async def get_cargo_cars_by_id(id: int):
     )
     cars = await Car.all().values()
     for car in cars:
-
+        car_loc = await Location.get(id=car['car_location'])
         miles = count_miles(cargo_latitude=pick_up.latitude,
                             cargo_longitude=pick_up.longitude,
-                            car_latitude=car['latitude'],
-                            car_longitude=car['longitude'])
+                            car_latitude=car_loc.latitude,
+                            car_longitude=car_loc.longitude)
 
         if miles is not None:
             car['miles'] = miles

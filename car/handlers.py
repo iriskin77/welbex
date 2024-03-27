@@ -8,10 +8,11 @@ router_car = APIRouter()
 
 @router_car.post("/")
 async def create_car(car: CreateCarRequest):
-    car = await services.create_car(car=car)
-    return car
+    new_car = await services.create_car(car=car)
+    return new_car
 
 
 @router_car.patch("/")
 async def update_car():
-    pass
+    res = await services.update_car_location()
+    return res

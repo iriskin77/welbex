@@ -5,6 +5,5 @@ class CreateCarRequest(BaseModel):
 
     unique_number: str
     car_name: str
-    latitude: float
-    longitude: float
+    zip: str
     load_capacity: int
