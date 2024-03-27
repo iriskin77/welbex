@@ -38,7 +38,7 @@ async def get_cargo_cars_by_id(id: int):
     )
     cars = await Car.all().values()
     for car in cars:
-        car_loc = await Location.get(id=car['car_location'])
+        car_loc = await Location.get(id=car['car_location_id'])
         miles = count_miles(cargo_latitude=pick_up.latitude,
                             cargo_longitude=pick_up.longitude,
                             car_latitude=car_loc.latitude,

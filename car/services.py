@@ -15,7 +15,7 @@ async def create_car(car: CreateCarRequest):
     return new_car.id
 
 
-async def update_car_location():
+async def update_all_cars_location():
     car_locs = await Car.all()
     new_locs = await Location.all()
 
@@ -25,6 +25,5 @@ async def update_car_location():
         car_locs[i].car_location_id = new_locs[rand_location].id
 
     await Car.bulk_update(car_locs, ['car_location_id'])
-    return 1
 
 

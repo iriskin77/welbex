@@ -15,7 +15,7 @@ app.include_router(routes)
 @app.on_event('startup')
 async def init_data():
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(update_all_cars_location, 'cron', second='*/5')
+    scheduler.add_job(update_all_cars_location, 'cron', minute='*/3')
     scheduler.start()
 
 

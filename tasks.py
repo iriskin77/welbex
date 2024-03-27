@@ -9,7 +9,7 @@ async def update_all_cars_location() -> None:
 
     for i in range(len(car_locs)):
 
-        rand_location = randint(0, len(new_locs))
+        rand_location = randint(0, len(new_locs)-1)
         car_locs[i].car_location_id = new_locs[rand_location].id
 
     await Car.bulk_update(car_locs, ['car_location_id'])
