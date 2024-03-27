@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import CreateCarRequest, CarUpdateRequest
 from car import services
+from car.models import Car
 from load_data import load
 
 
@@ -43,3 +44,15 @@ async def upload_cars():
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"cars uploaded successfully": 201})
+
+
+@router_car.get("/select_related")
+async def test():
+    p = []
+    for i in range(10):
+        a = await Car.filter(id=i).select_related("car_location")
+        print(a)
+        p.append(a)
+
+    print(p)
+    return p

@@ -23,7 +23,7 @@ async def create_cargo(item: CargoCreateRequest):
     return {"id": new_cargo_id}
 
 
-@router_cargo.get("/get_cargo")
+@router_cargo.get("/{id}")
 async def get_cargo_by_id(id: int):
     """"Получение информации о конкретном грузе по ID 
     (локации pick-up, delivery, вес, описание, список номеров ВСЕХ машин с расстоянием до выбранного груза);"""""
@@ -46,7 +46,7 @@ async def get_list_cargos():
         cargos = await services.get_cargos_cars()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return cargos
+    return {"cargos": cargos}
 
 
 @router_cargo.get("/filter")

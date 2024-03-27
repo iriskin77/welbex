@@ -13,3 +13,4 @@ class Location(models.Model):
     created_at = fields.DatetimeField(auto_now_add=True)
 
 
+

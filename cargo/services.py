@@ -63,8 +63,7 @@ async def get_cargos_cars():
     for cargo in cargos:
         cargo = await get_cargo_cars_by_id(cargo.id)
         list_cargos.append(cargo)
-    cargos = {"cargos": list_cargos}
-    return cargos
+    return list_cargos
 
 
 async def get_cargo_by_id(id: int):
@@ -102,8 +101,9 @@ async def filter_by_weight_or_miles(weight: int):
 
 async def update_cargo(id: int, cargo_to_update: dict):
     cargo = await get_cargo_by_id(id=id)
-    cargo = await cargo.update_from_dict(cargo_to_update).save()
-    return cargo.id
+    cargo_to_upd = await cargo.update_from_dict(cargo_to_update)
+    await cargo_to_upd.save()
+    return cargo_to_upd.id
 
 # ====================delete handlers ==============================
 

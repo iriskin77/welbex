@@ -51,4 +51,4 @@
 
 Схема БД:
 
-![](https://github.com/iriskin77/welbex/blob/master/images/db_scema.png)
+![](/images/db_scema.png)
