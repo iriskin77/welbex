@@ -3,13 +3,12 @@ from location.models import Location
 from car.models import Car
 from random import randint
 from string import ascii_uppercase
+from core import settings
 
 
-uszips = pd.read_csv("/home/abc/Рабочий стол/welbex/load_data/uszips.csv")
-
-
-async def load_uszips(uszips: pd.DataFrame) -> None:
-    uszips_to_add = uszips[["zip","latitude","longitude","city","state"]]
+async def load_uszips() -> None:
+    uszips = pd.read_csv(settings.USZIPS_PATH)
+    uszips_to_add = uszips[["zip", "latitude", "longitude", "city", "state"]]
     await Location.bulk_create([Location(**item) for item in uszips_to_add.to_dict('records')])
 
 
@@ -19,7 +18,7 @@ async def load_cards() -> None:
 
 
 async def generate_cars() -> list:
-    locs = await Location.all()
+    locations = await Location.all()
 
     cars = []
 
@@ -33,7 +32,7 @@ async def generate_cars() -> list:
         car['unique_number'] = unique_number
         car['car_name'] = car_name
         car['load_capacity'] = weight_capacity
-        car['load_capacity'] = locs[i].id
+        car['load_capacity'] = locations[i].id
         cars.append(car)
 
     return cars

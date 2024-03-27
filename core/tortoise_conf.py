@@ -1,10 +1,10 @@
-from core.settings import DATABASE_URI, APPS_MODELS
+from core import settings
 
 TORTOISE_ORM = {
-    "connections": {"default": DATABASE_URI},
+    "connections": {"default": settings.DATABASE_URI},
     "apps": {
         "models": {
-            "models": APPS_MODELS,
+            "models": settings.APPS_MODELS,
             "default_connection": "default",
         }
     },

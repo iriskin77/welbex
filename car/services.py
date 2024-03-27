@@ -1,7 +1,7 @@
+from random import randint
 from car.models import Car
 from location.models import Location
 from car.schema import CreateCarRequest
-from random import randint
 
 
 async def create_car(car: CreateCarRequest):

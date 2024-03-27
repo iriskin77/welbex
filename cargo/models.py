@@ -1,6 +1,5 @@
 from tortoise import models
 from tortoise import fields
-from location.models import Location
 
 
 class Cargo(models.Model):

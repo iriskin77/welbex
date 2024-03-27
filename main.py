@@ -1,11 +1,9 @@
-from fastapi import FastAPI, BackgroundTasks
-from routes import routes
-from tortoise.contrib.fastapi import register_tortoise
-from core.settings import DATABASE_URI, APPS_MODELS
+from fastapi import FastAPI
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
-import pandas as pd
+from routes import routes
+from core import settings
+from tortoise.contrib.fastapi import register_tortoise
 from tasks import update_all_cars_location
-
 
 
 app = FastAPI()
@@ -21,13 +19,9 @@ async def init_data():
 
 register_tortoise(
     app=app,
-    db_url=DATABASE_URI,
-    modules={"models": APPS_MODELS},
+    db_url=settings.DATABASE_URI,
+    modules={"models": settings.APPS_MODELS},
     generate_schemas=False,
     add_exception_handlers=False,
 )
 
-
-
-if __name__ == '__main__':
-    uvicorn.run(app=app, port=7777)
