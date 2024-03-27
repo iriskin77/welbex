@@ -35,7 +35,7 @@
 
 ## Как установить и запустить
 
-+ Клонировать репозиторий: git clone
++ Клонировать репозиторий: git clone https://github.com/iriskin77/welbex.git
 
 + Запустить приложение из Docker:
   + docker-compose build
@@ -49,4 +49,6 @@
 
 После этого можно создавать грузы, тестировать API
 
+Схема БД:
 
+![](https://github.com/iriskin77/welbex/blob/master/images/db_scema.png)
