@@ -2,7 +2,7 @@ from tortoise.expressions import Q
 from .models import Cargo
 from car.models import Car
 from location.models import Location
-from .schema import CargoCreateRequest, CargoUpdateRequest
+from .schema import CargoCreateRequest
 from geopy.distance import geodesic
 
 
@@ -35,17 +35,20 @@ async def get_cargo_cars_by_id(id: int):
         Q(id=cargo.pick_up_location_id) |
         Q(id=cargo.delivery_location_id)
     )
+
     cars = await Car.all().values()
-    for car in cars:
-        car_loc = await Location.get(id=car['car_location_id'])
+    cars_id = [car_id['car_location_id'] for car_id in cars]
+    cars_locations = await Location.filter(id__in=cars_id)
+
+    for i in range(len(cars_locations)):
         miles = count_miles(cargo_latitude=pick_up.latitude,
                             cargo_longitude=pick_up.longitude,
-                            car_latitude=car_loc.latitude,
-                            car_longitude=car_loc.longitude)
+                            car_latitude=cars_locations[i].latitude,
+                            car_longitude=cars_locations[i].longitude)
 
         if miles is not None:
-            car['miles'] = miles
-            list_cars.append(car)
+            cars[i]['miles'] = miles
+            list_cars.append(cars[i])
 
     res = {"cargo_name": cargo.cargo_name,
            "weight": cargo.weight,
@@ -86,9 +89,9 @@ def count_miles(cargo_latitude: float,
         return miles
 
 
-async def filter_by_weight_or_miles(weight: int):
+async def filter_by_weight_or_miles(weight_lt: int, weight_gt: int):
         list_cargos = []
-        cargos = await Cargo.all().filter(Q(weight__lt=weight)).order_by()
+        cargos = await Cargo.all().filter(Q(weight__lt=weight_lt) & Q(weight__gt=weight_gt)).order_by()
         for cargo in cargos:
             cargo = await get_cargo_cars_by_id(cargo.id)
             list_cargos.append(cargo)

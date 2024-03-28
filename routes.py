@@ -6,6 +6,6 @@ from location.handlers import router_location
 
 routes = APIRouter()
 
-routes.include_router(router=router_cargo, prefix="/cargo")
-routes.include_router(router=router_car, prefix="/car")
+routes.include_router(router=router_cargo, prefix="/cargos")
+routes.include_router(router=router_car, prefix="/cars")
 routes.include_router(router=router_location, prefix="/location")

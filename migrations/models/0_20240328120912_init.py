@@ -7,7 +7,7 @@ async def upgrade(db: BaseDBAsyncClient) -> str:
     "id" SERIAL NOT NULL PRIMARY KEY,
     "city" VARCHAR(255) NOT NULL,
     "state" VARCHAR(255) NOT NULL,
-    "zip" INT NOT NULL,
+    "zip" INT NOT NULL UNIQUE,
     "latitude" DOUBLE PRECISION NOT NULL,
     "longitude" DOUBLE PRECISION NOT NULL,
     "created_at" TIMESTAMPTZ NOT NULL  DEFAULT CURRENT_TIMESTAMP

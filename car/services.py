@@ -1,4 +1,3 @@
-from random import randint
 from .models import Car
 from location.models import Location
 from .schema import CreateCarRequest
@@ -32,3 +31,7 @@ async def update_car_by_id(id: int, car_to_update: dict):
     print(car)
     return car.id
 
+
+async def get_cars(limit: int):
+    cars = await Car.all().limit(limit)
+    return cars

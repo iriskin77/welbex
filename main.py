@@ -3,7 +3,8 @@ from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from routes import routes
 from core import settings
 from tortoise.contrib.fastapi import register_tortoise
-from tasks import update_all_cars_location
+from car.tasks import update_all_cars_location
+import uvicorn
 
 
 app = FastAPI()
@@ -25,3 +26,8 @@ register_tortoise(
     add_exception_handlers=False,
 )
 
+
+
+
+if __name__ == '__main__':
+    uvicorn.run(app=app, port=7777)

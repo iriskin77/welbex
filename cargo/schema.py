@@ -52,3 +52,9 @@ class CargoUpdateResponse(BaseModel):
 class CargoDeleteResponse(BaseModel):
 
     id: int
+
+
+class CargosFilterWeight(BaseModel):
+
+    weight_gt: int
+    weight_lt: int

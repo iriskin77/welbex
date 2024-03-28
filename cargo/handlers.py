@@ -1,13 +1,14 @@
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException
 from . import services
 from .schema import (
                            CargoCreateRequest,
                            CargoCreateResponse,
-                           CargosListResponse,
-                           CargoByIdResponse,
                            CargoUpdateRequest,
                            CargoUpdateResponse,
-                           CargoDeleteResponse
+                           CargoDeleteResponse,
+                           CargosFilterWeight
                            )
 
 router_cargo = APIRouter()
@@ -39,21 +40,22 @@ async def get_cargo_by_id(id: int):
     return cargo
 
 
-@router_cargo.get("/list_cargos")
+@router_cargo.get("/")
 async def get_list_cargos():
     """"Получение списка грузов (локации pick-up, delivery, количество ближайших машин до груза ( =< 450 миль));"""""
     try:
+        pass
         cargos = await services.get_cargos_cars()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return {"cargos": cargos}
+    return cargos
 
 
-@router_cargo.get("/filter")
-async def filter_cargos(weight: int):
+@router_cargo.get("/filter/")
+async def filter_cargos(weight_gt: int, weight_lt: int):
     """"Фильтр списка грузов (вес, мили ближайших машин до грузов);"""""
     try:
-       res = await services.filter_by_weight_or_miles(weight=weight)
+        res = await services.filter_by_weight_or_miles(weight_gt=weight_gt, weight_lt=weight_lt)
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return res

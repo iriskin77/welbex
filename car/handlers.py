@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import CreateCarRequest, CarUpdateRequest
-from car import services
+from . import services
 from car.models import Car
+from location.models import Location
 from load_data import load
-
 
 router_car = APIRouter()
 
@@ -39,6 +39,7 @@ async def update_car_by_id(id: int, car_update: CarUpdateRequest):
 
 @router_car.get("/upload_cars")
 async def upload_cars():
+    """"Добавляет 400 случайных машин в БД"""""
     try:
         await load.load_cards()
     except Exception as ex:
@@ -46,13 +47,19 @@ async def upload_cars():
     return JSONResponse({"cars uploaded successfully": 201})
 
 
-@router_car.get("/select_related")
-async def test():
-    p = []
-    for i in range(10):
-        a = await Car.filter(id=i).select_related("car_location")
-        print(a)
-        p.append(a)
+@router_car.get("/")
+async def get_cars(limit: int):
+    try:
+        cars = await services.get_cars(limit=limit)
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=f"Database error: {ex}")
+    return cars
 
-    print(p)
-    return p
+
+# @router_car.get("/select_related")
+# async def test():
+#     cars = await Car.all().values()
+#     cars_id = [car_id['car_location_id'] for car_id in cars]
+#     res = await Location.filter(id__in=cars_id)
+#     return res
+
