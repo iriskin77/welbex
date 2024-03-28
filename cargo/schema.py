@@ -1,9 +1,10 @@
 from typing import List
 from pydantic import BaseModel
 from location.schema import Location
-from car.schema import CreateCarRequest
+from car.schema import CargoCarGetResponse
 
 # create_cargo
+
 
 class CargoCreateRequest(BaseModel):
     """"Запрос на создание груза"""""
@@ -30,7 +31,7 @@ class CargoByIdResponse(BaseModel):
     description: str
     pick_up_location: Location
     delivery_location: Location
-    cars: List[CreateCarRequest]
+    cars: List[CargoCarGetResponse]
 
 
 class CargosListResponse(BaseModel):

@@ -50,6 +50,8 @@ async def get_cargo_cars_by_id(id: int):
             cars[i]['miles'] = miles
             list_cars.append(cars[i])
 
+    list_cars.sort(key=lambda car: car['miles'])
+
     res = {"cargo_name": cargo.cargo_name,
            "weight": cargo.weight,
            "description": cargo.description,
@@ -91,10 +93,15 @@ def count_miles(cargo_latitude: float,
 
 async def filter_by_weight_or_miles(weight_lt: int, weight_gt: int):
         list_cargos = []
-        cargos = await Cargo.all().filter(Q(weight__lt=weight_lt) & Q(weight__gt=weight_gt)).order_by()
+        cargos = await Cargo.all().filter(
+            Q(weight__lt=weight_lt) &
+            Q(weight__gt=weight_gt))\
+            .order_by()
+
         for cargo in cargos:
             cargo = await get_cargo_cars_by_id(cargo.id)
             list_cargos.append(cargo)
+
         return list_cargos
 
 

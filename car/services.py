@@ -22,13 +22,9 @@ async def get_car_by_id(id: int):
 
 async def update_car_by_id(id: int, car_to_update: dict):
     car = await get_car_by_id(id=id)
-    print(car)
-    #print(car.car_location_id)
     new_car_location = await Location.get(zip=car_to_update['zip'])
-    print(new_car_location)
     car_to_update['car_location_id'] = new_car_location.id
     await car.update_from_dict(car_to_update).save()
-    print(car)
     return car.id
 
 

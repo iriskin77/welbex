@@ -22,7 +22,7 @@ async def generate_cars() -> list:
 
     cars = []
 
-    for i in range(400):
+    for i in range(200):
         car = {}
         rand_letter = ascii_uppercase[randint(0, len(ascii_uppercase)-1)]
         rand_int = randint(1000, 9999)

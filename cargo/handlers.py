@@ -8,8 +8,10 @@ from .schema import (
                            CargoUpdateRequest,
                            CargoUpdateResponse,
                            CargoDeleteResponse,
-                           CargosFilterWeight
+                           CargoByIdResponse,
+                           CargosListResponse
                            )
+
 
 router_cargo = APIRouter()
 
@@ -24,7 +26,7 @@ async def create_cargo(item: CargoCreateRequest):
     return {"id": new_cargo_id}
 
 
-@router_cargo.get("/{id}")
+@router_cargo.get("/{id}", response_model=CargoByIdResponse)
 async def get_cargo_by_id(id: int):
     """"Получение информации о конкретном грузе по ID 
     (локации pick-up, delivery, вес, описание, список номеров ВСЕХ машин с расстоянием до выбранного груза);"""""
@@ -40,7 +42,7 @@ async def get_cargo_by_id(id: int):
     return cargo
 
 
-@router_cargo.get("/")
+@router_cargo.get("/", response_model=CargosListResponse)
 async def get_list_cargos():
     """"Получение списка грузов (локации pick-up, delivery, количество ближайших машин до груза ( =< 450 миль));"""""
     try:
@@ -48,7 +50,7 @@ async def get_list_cargos():
         cargos = await services.get_cargos_cars()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return cargos
+    return {"cargos": cargos}
 
 
 @router_cargo.get("/filter/")
