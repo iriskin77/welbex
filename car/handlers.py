@@ -34,15 +34,15 @@ async def update_car_by_id(id: int, car_update: CarUpdateRequest):
         location = await get_location_by_zip(zip=car_update.zip)
         if location is None:
             raise HTTPException(status_code=404, detail="This location (zip) was not found")
-
     try:
+        print(car_to_update)
         car_updated_id = await services.update_car_by_id(id=id, car_to_update=car_to_update)
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return {"id": car_updated_id}
 
 
-@router_car.get("/upload_cars")
+@router_car.post("/upload_cars")
 async def upload_cars():
     """"Добавляет 200 случайных машин в БД"""""
     try:

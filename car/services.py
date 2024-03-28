@@ -24,10 +24,17 @@ async def get_car_by_id(id: int):
 
 async def update_car_by_id(id: int, car_to_update: dict):
     car = await get_car_by_id(id=id)
-    new_car_location = await Location.get(zip=car_to_update['zip'])
-    car_to_update['car_location_id'] = new_car_location.id
-    await car.update_from_dict(car_to_update).save()
-    return car.id
+
+    if "zip" not in car_to_update:
+        await car.update_from_dict(car_to_update)
+        await car.save()
+        return car.id
+    else:
+        new_car_location = await Location.get(zip=car_to_update['zip'])
+        car_to_update['car_location_id'] = new_car_location.id
+        await car.update_from_dict(car_to_update)
+        await car.save()
+        return car.id
 
 
 async def get_cars(limit: int):

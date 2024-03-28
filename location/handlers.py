@@ -7,7 +7,7 @@ from .schema import LocationListResponse
 router_location = APIRouter()
 
 
-@router_location.get("/upload_uszips")
+@router_location.post("/upload_uszips")
 async def load_uszips():
     """"Добавляет локации из файла uszips.csv"""""
     try:
