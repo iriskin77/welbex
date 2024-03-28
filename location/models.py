@@ -3,6 +3,7 @@ from tortoise import fields
 
 
 class Location(models.Model):
+    """"Таблица location для адресов из uszips.csv"""""
 
     id = fields.IntField(pk=True, unique=True)
     city = fields.CharField(max_length=255)

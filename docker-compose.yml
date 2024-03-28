@@ -6,8 +6,6 @@ services:
     build: .
     container_name: app_test
     command: ['./start.sh']
-    #volumes:
-      #- ./task_db.sqlite3:/test_task/task_db.sqlite3
     ports:
       - "8000:8000"
 

@@ -3,6 +3,7 @@ from tortoise import fields
 
 
 class Cargo(models.Model):
+    """"Таблица cargo"""""
 
     id = fields.IntField(pk=True, unique=True)
     cargo_name = fields.CharField(max_length=255)

@@ -17,6 +17,7 @@ class Location(BaseModel):
 
 
 class LocationGetResponse(BaseModel):
+    """Ответ на получение локации (для LocationListResponse)"""""
 
     longitude: float
     state: str
@@ -28,5 +29,6 @@ class LocationGetResponse(BaseModel):
 
 
 class LocationListResponse(BaseModel):
+    """Ответ на получение списка локаций"""""
 
     locations: List[LocationGetResponse]

@@ -4,7 +4,6 @@ from routes import routes
 from core import settings
 from tortoise.contrib.fastapi import register_tortoise
 from car.tasks import update_all_cars_location
-import uvicorn
 
 
 app = FastAPI()
@@ -12,7 +11,8 @@ app.include_router(routes)
 
 
 @app.on_event('startup')
-async def init_data():
+async def update_cars_locations():
+    """"Автоматическое обновление локаций всех машин раз в 3 минуты (локация меняется на другую случайную)."""""
     scheduler = AsyncIOScheduler()
     scheduler.add_job(update_all_cars_location, 'cron', minute='*/3')
     scheduler.start()
@@ -25,9 +25,3 @@ register_tortoise(
     generate_schemas=False,
     add_exception_handlers=False,
 )
-
-
-
-
-if __name__ == '__main__':
-    uvicorn.run(app=app, port=7777)

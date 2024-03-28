@@ -9,6 +9,7 @@ router_car = APIRouter()
 
 @router_car.post("/", response_model=CreateCarResponse)
 async def create_car(car: CreateCarRequest):
+    """"Создание машины"""""
     try:
         new_car_id = await services.create_car(car=car)
     except Exception as ex:
@@ -18,7 +19,7 @@ async def create_car(car: CreateCarRequest):
 
 @router_car.patch("/{id}", response_model=CarUpdateResponse)
 async def update_car_by_id(id: int, car_update: CarUpdateRequest):
-    """"Редактирование машины по ID (локация (определяется по введенному zip-коду))"""
+    """"Редактирование машины по ID (локация (определяется по введенному zip-коду))"""""
 
     car = await services.get_car_by_id(id=id)
     if car is None:
@@ -48,6 +49,7 @@ async def upload_cars():
 
 @router_car.get("/", response_model=CarsGetRequest)
 async def get_cars(limit: int):
+    """"Получение списка машин"""""
     try:
         cars = await services.get_cars(limit=limit)
     except Exception as ex:

@@ -4,6 +4,7 @@ from pydantic import BaseModel
 
 
 class CreateCarRequest(BaseModel):
+    """"Запрос на создание машины"""""
 
     unique_number: str
     car_name: str
@@ -12,11 +13,13 @@ class CreateCarRequest(BaseModel):
 
 
 class CreateCarResponse(BaseModel):
+    """"Ответ на создание машины"""""
 
     id: int
 
 
 class CarUpdateRequest(BaseModel):
+    """"Запрос на обновление машины"""""
 
     unique_number: str
     car_name: str
@@ -25,11 +28,13 @@ class CarUpdateRequest(BaseModel):
 
 
 class CarUpdateResponse(BaseModel):
+    """"Ответ на обновление машины"""""
 
     id: int
 
 
 class CarGetRequest(BaseModel):
+    """"Запрос на получение машины (для CarsGetRequest)"""""
 
     id: int
     car_name: str
@@ -39,11 +44,13 @@ class CarGetRequest(BaseModel):
 
 
 class CarsGetRequest(BaseModel):
+    """"Запрос на получение списка машин (для грузов)"""""
 
     cars: List[CarGetRequest]
 
 
 class CargoCarGetResponse(BaseModel):
+    """"Ответ на получение машины"""""
 
     id: int
     car_name: str

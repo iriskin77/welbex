@@ -1,9 +1,7 @@
 from typing import List
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from location.schema import Location
 from car.schema import CargoCarGetResponse
-
-# create_cargo
 
 
 class CargoCreateRequest(BaseModel):
@@ -15,16 +13,22 @@ class CargoCreateRequest(BaseModel):
     weight: int
     description: str
 
+    @field_validator('weight', mode='before')
+    @classmethod
+    def check_weight(cls, value):
+        if 1 < value < 1000:
+            return value
+
+
 
 class CargoCreateResponse(BaseModel):
     """"Ответ на создание груза"""""
 
     id: int
 
-# get_list_cargos
-
 
 class CargoByIdResponse(BaseModel):
+    """"Запрос на получение груза по ID"""""
 
     cargo_name: str
     weight: int
@@ -35,27 +39,25 @@ class CargoByIdResponse(BaseModel):
 
 
 class CargosListResponse(BaseModel):
+    """"Запрос на получение списка грузов"""""
 
     cargos: List[CargoByIdResponse]
 
 
 class CargoUpdateRequest(BaseModel):
+    """"Запрос на обновление груза"""""
 
     weight: int
     description: str
 
 
 class CargoUpdateResponse(BaseModel):
+    """"Ответ на обновление груза"""""
 
     id: int
 
 
 class CargoDeleteResponse(BaseModel):
+    """"Ответ на удаление груза"""""
 
     id: int
-
-
-class CargosFilterWeight(BaseModel):
-
-    weight_gt: int
-    weight_lt: int

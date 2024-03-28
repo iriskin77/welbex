@@ -3,6 +3,7 @@ from tortoise import fields
 
 
 class Car(models.Model):
+    """"Таблица car"""""
 
     id = fields.IntField(pk=True, unique=True)
     unique_number = fields.CharField(max_length=255)

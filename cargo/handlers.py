@@ -1,16 +1,12 @@
-from typing import Optional
-
 from fastapi import APIRouter, HTTPException
 from . import services
-from .schema import (
-                           CargoCreateRequest,
-                           CargoCreateResponse,
-                           CargoUpdateRequest,
-                           CargoUpdateResponse,
-                           CargoDeleteResponse,
-                           CargoByIdResponse,
-                           CargosListResponse
-                           )
+from .schema import (CargoCreateRequest,
+                     CargoCreateResponse,
+                     CargoUpdateRequest,
+                     CargoUpdateResponse,
+                     CargoDeleteResponse,
+                     CargoByIdResponse,
+                     CargosListResponse)
 
 
 router_cargo = APIRouter()

@@ -19,6 +19,7 @@ async def load_uszips():
 
 @router_location.get("/", response_model=LocationListResponse)
 async def get_uszips(limit: int):
+    """"Получение списка локаций"""""
     try:
         locations = await services.get_uszips(limit=limit)
     except Exception as ex:

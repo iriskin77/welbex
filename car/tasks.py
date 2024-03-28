@@ -4,6 +4,7 @@ from location.models import Location
 
 
 async def update_all_cars_location() -> None:
+    """"Автоматическое обновление локаций всех машин раз в 3 минуты (локация меняется на другую случайную)"""""
     car_locs_to_update = await Car.all()
     new_locs_to_update = await Location.all()
 
