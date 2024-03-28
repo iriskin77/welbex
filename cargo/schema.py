@@ -10,8 +10,8 @@ class CargoCreateRequest(BaseModel):
     """"Запрос на создание груза"""""
 
     cargo_name: str
-    zip_pickup: str
-    zip_delivery: str
+    zip_pickup: int
+    zip_delivery: int
     weight: int
     description: str
 

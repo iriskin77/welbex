@@ -7,7 +7,7 @@
 
 Использованные технологии:
 
-![](https://img.shields.io/badge/FastApi-coral) ![](https://img.shields.io/badge/PostgreSql-lightblue) ![](https://img.shields.io/badge/Tortoise-0.20.0-crimson) ![](https://img.shields.io/badge/Docker-blue) ![](https://img.shields.io/badge/DockerCompose-blue)
+![](https://img.shields.io/badge/FastApi-coral) ![](https://img.shields.io/badge/PostgreSql-lightblue) ![](https://img.shields.io/badge/TortoiseORM-0.20.0-crimson) ![](https://img.shields.io/badge/Docker-blue) ![](https://img.shields.io/badge/DockerCompose-blue)
 
 ## Выполненные задачи
 
@@ -43,12 +43,38 @@
 
 ### **Важно!!** 
 + После запуска необходимо наполнить БД машинами и локациями.
-Для этого нужно сделать два get запроса:
-+ Наполнение БД машинами (2000 машин будет добавлено): http://0.0.0.0:8000/car/upload_cars
-+ Наполнение БД локациями из таблицы uszips.csv : http://0.0.0.0:8000/load/load_uszips
+Для этого нужно сделать два get запроса (upload_cars, upload_uszips):
+
+![](https://github.com/iriskin77/welbex/blob/master/images/handlers.png)
+
+1) **Сначало** наполнить БД локациями из таблицы uszips.csv : http://0.0.0.0:8000/load/load_uszips
+
+```json
+    {
+      "id": 365,
+      "zip": 1746,
+      "state": "Massachusetts",
+      "latitude": 42.19775,
+      "longitude": -71.44499,
+      "city": "Holliston",
+      "created_at": "2024-03-28T08:53:41.084517Z"
+    }
+```
+
+2) **Затем** наполнить БД машинами (200 машин будет добавлено): http://0.0.0.0:8000/car/upload_cars
+
+```json
+   {
+     "id": 1,
+     "car_name": "car_name7866",
+     "car_location_id": 3186,
+     "load_capacity": 479,
+     "unique_number": "8743E"
+   }
+```
 
 После этого можно создавать грузы, тестировать API
 
 Схема БД:
 
-![](/images/db_scema.png)
+![](https://github.com/iriskin77/welbex/blob/master/images/db_schema.png)

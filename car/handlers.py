@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import CreateCarRequest, CreateCarResponse, CarUpdateRequest, CarUpdateResponse, CarsGetRequest
 from . import services
-from load_data import load
+
 
 router_car = APIRouter()
 
@@ -39,7 +39,8 @@ async def update_car_by_id(id: int, car_update: CarUpdateRequest):
 async def upload_cars():
     """"Добавляет 200 случайных машин в БД"""""
     try:
-        await load.load_cards()
+        print("upload_cars")
+        await services.load_cards()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"cars uploaded successfully": 201})

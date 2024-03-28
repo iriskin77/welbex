@@ -1,3 +1,5 @@
+from random import choice, randint
+from string import ascii_uppercase
 from .models import Car
 from location.models import Location
 from .schema import CreateCarRequest
@@ -30,4 +32,30 @@ async def update_car_by_id(id: int, car_to_update: dict):
 
 async def get_cars(limit: int):
     cars = await Car.all().limit(limit)
+    return cars
+
+
+async def load_cards() -> None:
+    cars = await generate_cars()
+    await Car.bulk_create([Car(**car) for car in cars])
+
+
+async def generate_cars() -> list:
+    locations = await Location.all()
+
+    cars = []
+
+    for i in range(200):
+        car = {}
+        rand_letter = choice([letter for letter in ascii_uppercase])
+        rand_int = randint(1000, 9999)
+        unique_number = str(rand_int) + rand_letter
+        weight_capacity = randint(1, 1000)
+        car_name = "car_name" + str(randint(1, 9999))
+        car['unique_number'] = unique_number
+        car['car_name'] = car_name
+        car['load_capacity'] = weight_capacity
+        car['car_location_id'] = locations[i].id
+        cars.append(car)
+
     return cars

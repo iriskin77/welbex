@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from . import services
 from .schema import LocationListResponse
-from load_data import load
+
 
 router_location = APIRouter()
 
@@ -11,7 +11,7 @@ router_location = APIRouter()
 async def load_uszips():
     """"Добавляет локации из файла uszips.csv"""""
     try:
-        await load.load_uszips()
+        await services.load_uszips()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"status": 201})
