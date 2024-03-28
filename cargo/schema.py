@@ -1,6 +1,6 @@
 from typing import List
 from pydantic import BaseModel, field_validator
-from location.schema import Location
+from location.schema import LocationGetResponse
 from car.schema import CargoCarGetResponse
 
 
@@ -20,7 +20,6 @@ class CargoCreateRequest(BaseModel):
             return value
 
 
-
 class CargoCreateResponse(BaseModel):
     """"Ответ на создание груза"""""
 
@@ -33,8 +32,8 @@ class CargoByIdResponse(BaseModel):
     cargo_name: str
     weight: int
     description: str
-    pick_up_location: Location
-    delivery_location: Location
+    pick_up_location: LocationGetResponse
+    delivery_location: LocationGetResponse
     cars: List[CargoCarGetResponse]
 
 

@@ -31,8 +31,19 @@ async def update_car_by_id(id: int, car_to_update: dict):
 
 
 async def get_cars(limit: int):
-    cars = await Car.all().limit(limit)
-    return cars
+    cars = await Car.all().select_related("car_location").limit(limit).order_by("id")
+    res = []
+    for car in cars:
+        car_item = {
+            "id": car.id,
+            "car_name": car.car_name,
+            "unique_number": car.unique_number,
+            "load_capacity": car.load_capacity,
+            "car_location": car.car_location,
+        }
+        res.append(car_item)
+
+    return res
 
 
 async def load_cards() -> None:

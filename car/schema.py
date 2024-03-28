@@ -1,14 +1,13 @@
 from typing import Optional, List
-
 from pydantic import BaseModel
-
+from location.schema import LocationGetResponse
 
 class CreateCarRequest(BaseModel):
     """"Запрос на создание машины"""""
 
     unique_number: str
     car_name: str
-    zip: str
+    zip: int
     load_capacity: int
 
 
@@ -21,10 +20,10 @@ class CreateCarResponse(BaseModel):
 class CarUpdateRequest(BaseModel):
     """"Запрос на обновление машины"""""
 
-    unique_number: str
-    car_name: str
-    zip: str
-    load_capacity: int
+    unique_number: Optional[str] = None
+    car_name: Optional[str] = None
+    zip: Optional[int] = None
+    load_capacity: Optional[int] = None
 
 
 class CarUpdateResponse(BaseModel):
@@ -38,9 +37,9 @@ class CarGetRequest(BaseModel):
 
     id: int
     car_name: str
-    car_location_id: int
-    load_capacity: int
     unique_number: str
+    load_capacity: int
+    car_location: LocationGetResponse
 
 
 class CarsGetRequest(BaseModel):
@@ -54,7 +53,7 @@ class CargoCarGetResponse(BaseModel):
 
     id: int
     car_name: str
-    car_location_id: int
-    load_capacity: int
     unique_number: str
+    load_capacity: int
     miles: float
+    car_location: LocationGetResponse

@@ -14,7 +14,7 @@ app.include_router(routes)
 async def update_cars_locations():
     """"Автоматическое обновление локаций всех машин раз в 3 минуты (локация меняется на другую случайную)."""""
     scheduler = AsyncIOScheduler()
-    scheduler.add_job(update_all_cars_location, 'cron', minute='*/3')
+    scheduler.add_job(update_all_cars_location, 'cron', second='*/3')
     scheduler.start()
 
 

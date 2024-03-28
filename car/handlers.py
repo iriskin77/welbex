@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import CreateCarRequest, CreateCarResponse, CarUpdateRequest, CarUpdateResponse, CarsGetRequest
 from . import services
+from location.services import get_location_by_zip
 
 
 router_car = APIRouter()
@@ -14,7 +15,7 @@ async def create_car(car: CreateCarRequest):
         new_car_id = await services.create_car(car=car)
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
-    return new_car_id
+    return {"id": new_car_id}
 
 
 @router_car.patch("/{id}", response_model=CarUpdateResponse)
@@ -29,6 +30,11 @@ async def update_car_by_id(id: int, car_update: CarUpdateRequest):
     if car_to_update == {}:
         raise HTTPException(status_code=500, detail="At least one parametre should be provided")
 
+    if car_update.zip is not None:
+        location = await get_location_by_zip(zip=car_update.zip)
+        if location is None:
+            raise HTTPException(status_code=404, detail="This location (zip) was not found")
+
     try:
         car_updated_id = await services.update_car_by_id(id=id, car_to_update=car_to_update)
     except Exception as ex:
@@ -40,15 +46,23 @@ async def update_car_by_id(id: int, car_update: CarUpdateRequest):
 async def upload_cars():
     """"Добавляет 200 случайных машин в БД"""""
     try:
-        print("upload_cars")
         await services.load_cards()
     except Exception as ex:
         raise HTTPException(status_code=500, detail=f"Database error: {ex}")
     return JSONResponse({"cars uploaded successfully": 201})
 
 
-@router_car.get("/", response_model=CarsGetRequest)
-async def get_cars(limit: int):
+@router_car.get("{id}")
+async def get_car(id: int):
+    try:
+        car = await services.get_car_by_id(id=id)
+    except Exception as ex:
+        raise HTTPException(status_code=500, detail=f"Database error: {ex}")
+    return car
+
+
+@router_car.get("/get_cars", response_model=CarsGetRequest)
+async def get_cars(limit: int | None = None):
     """"Получение списка машин"""""
     try:
         cars = await services.get_cars(limit=limit)

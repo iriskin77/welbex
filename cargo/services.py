@@ -36,21 +36,25 @@ async def get_cargo_cars_by_id(id: int):
         Q(id=cargo.delivery_location_id)
     )
 
-    cars = await Car.all().values()
-    cars_id = [car_id['car_location_id'] for car_id in cars]
-    cars_locations = await Location.filter(id__in=cars_id)
+    cars = await Car.all().select_related("car_location")
 
-    for i in range(len(cars_locations)):
+    for car in cars:
         miles = count_miles(cargo_latitude=pick_up.latitude,
                             cargo_longitude=pick_up.longitude,
-                            car_latitude=cars_locations[i].latitude,
-                            car_longitude=cars_locations[i].longitude)
+                            car_latitude=car.car_location.latitude,
+                            car_longitude=car.car_location.longitude)
 
         if miles is not None:
-            cars[i]['miles'] = miles
-            list_cars.append(cars[i])
+            car_item = {"id": car.id,
+                        "unique_number": car.unique_number,
+                        "car_name": car.car_name,
+                        "load_capacity": car.load_capacity,
+                        "miles": miles,
+                        "car_location": car.car_location}
 
-    list_cars.sort(key=lambda car: car['miles'])
+            list_cars.append(car_item)
+
+    list_cars.sort(key=lambda c: c['miles'])
 
     res = {"cargo_name": cargo.cargo_name,
            "weight": cargo.weight,
