@@ -1,4 +1,4 @@
-from core import settings
+from src.core import settings
 
 TORTOISE_ORM = {
     "connections": {"default": settings.DATABASE_URI},
