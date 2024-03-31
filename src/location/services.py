@@ -1,6 +1,6 @@
 from .models import Location
 import pandas as pd
-from core import settings
+from src.core import settings
 
 
 async def get_uszips(limit: int):

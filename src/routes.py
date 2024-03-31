@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from cargo.handlers import router_cargo
-from car.handlers import router_car
-from location.handlers import router_location
+from .cargo.handlers import router_cargo
+from .car.handlers import router_car
+from .location.handlers import router_location
 
 
 routes = APIRouter()

@@ -1,7 +1,7 @@
 from tortoise.expressions import Q
 from .models import Cargo
-from car.models import Car
-from location.models import Location
+from src.car.models import Car
+from src.location.models import Location
 from .schema import CargoCreateRequest
 from geopy.distance import geodesic
 

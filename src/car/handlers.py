@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import CreateCarRequest, CreateCarResponse, CarUpdateRequest, CarUpdateResponse, CarsGetRequest
 from . import services
-from location.services import get_location_by_zip
+from src.location.services import get_location_by_zip
 
 
 router_car = APIRouter()

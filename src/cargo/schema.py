@@ -1,7 +1,7 @@
 from typing import List
 from pydantic import BaseModel, field_validator
-from location.schema import LocationGetResponse
-from car.schema import CargoCarGetResponse
+from src.location.schema import LocationGetResponse
+from src.car.schema import CargoCarGetResponse
 
 
 class CargoCreateRequest(BaseModel):

@@ -1,7 +1,7 @@
 from random import choice, randint
 from string import ascii_uppercase
 from .models import Car
-from location.models import Location
+from src.location.models import Location
 from .schema import CreateCarRequest
 
 

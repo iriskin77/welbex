@@ -1,6 +1,6 @@
 from typing import Optional, List
 from pydantic import BaseModel
-from location.schema import LocationGetResponse
+from src.location.schema import LocationGetResponse
 
 class CreateCarRequest(BaseModel):
     """"Запрос на создание машины"""""

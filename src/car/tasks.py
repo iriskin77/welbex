@@ -1,6 +1,6 @@
 from random import choice
-from car.models import Car
-from location.models import Location
+from src.car.models import Car
+from src.location.models import Location
 
 
 async def update_all_cars_location() -> None:
