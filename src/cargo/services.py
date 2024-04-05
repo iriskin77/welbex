@@ -10,10 +10,9 @@ from geopy.distance import geodesic
 
 
 async def create_cargo(item: CargoCreateRequest) -> int:
-    pick_up_location, delivery_location = await Location.filter(
-        Q(zip=item.zip_pickup) |
-        Q(zip=item.zip_delivery)
-    )
+
+    pick_up_location = await Location.get(zip=item.zip_pickup)
+    delivery_location = await Location.get(zip=item.zip_delivery)
 
     new_cargo = await Cargo(cargo_name=item.cargo_name,
                             pick_up_location=pick_up_location,
@@ -31,10 +30,9 @@ async def create_cargo(item: CargoCreateRequest) -> int:
 async def get_cargo_cars_by_id(id: int):
     list_cars = []
     cargo = await get_cargo_by_id(id=id)
-    pick_up, delivery = await Location.filter(
-        Q(id=cargo.pick_up_location_id) |
-        Q(id=cargo.delivery_location_id)
-    )
+
+    pick_up = await Location.get(id=cargo.pick_up_location_id)
+    delivery = await Location.get(id=cargo.delivery_location_id)
 
     cars = await Car.all().select_related("car_location")
 
